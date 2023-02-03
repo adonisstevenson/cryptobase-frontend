@@ -1,0 +1,219 @@
+:root{
+    --background-main: #090916;
+    --background-elem-1: #0D0A29;
+    --background-elem-2: #130E39;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap');
+
+body{
+    background: var(--background-main);
+}
+
+.nav-item{
+    margin: 0px 10px 0px 10px;
+    font-weight: bold;
+}
+
+.nav-main{
+    padding-top: 15px;
+    margin-bottom: 30px;
+}
+
+.dropdown-menu{
+    left: -120px;
+    background: var(--background-elem-1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.7);
+}
+.dropdown-item{
+    color: rgba(255, 255, 255, 0.7);
+}
+hr{
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo-nav{
+    width: 50px;
+}
+
+.welcome-logo-box{
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    width: 100%;
+    padding: 20px 0px 20px 0px;
+}
+
+@keyframes up-down-signs{
+    from{
+        top: -150px;
+    }
+    to{
+        top: 20px;
+    }
+}
+@keyframes down-up-name{
+    0%{
+        top: 200px;
+        opacity: 0;
+    }
+    30%{
+        opacity: 0;
+    }
+    100%{
+        top: 70px;
+        opacity: 1;
+    }
+}
+
+@keyframes left-right-sign{
+    0%{
+        left: -300px;
+        opacity: 0;
+    }
+    30%{
+        opacity: 0;
+    }
+    100%{
+        left: 0;
+        opacity: 1;
+    }
+}
+
+.logo-symbols, .logo-name, .logo-sign{
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    color: white;
+}
+
+.logo-symbols{
+    width: 180px;
+    animation-name: up-down-signs;
+    animation-duration: 2s;
+}
+.logo-name{
+    width: 450px;
+    top: 70px;
+    animation-name: down-up-name;
+    animation-duration: 3s;
+    font-family: 'Raleway', sans-serif;
+    font-size: 60px;
+    letter-spacing: 5px;
+}
+
+.logo-sign{
+    top: 140px;
+    width: 500px;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    letter-spacing: 5px;
+    font-weight: 100;
+    animation-name: left-right-sign;
+    animation-duration: 3.5s;
+}
+
+@keyframes box-glow{
+    0%{
+        -webkit-box-shadow: 3px 8px 90px -24px rgba(66, 68, 90, 1);
+        -moz-box-shadow: 3px 8px 90px -24px rgba(66, 68, 90, 1);
+        box-shadow: 3px 8px 90px -24px rgba(66, 68, 90, 1);
+    }
+    50%{
+        -webkit-box-shadow: 3px 8px 90px -50px rgba(66, 68, 90, 1);
+        -moz-box-shadow: 3px 8px 90px -50px rgba(66, 68, 90, 1);
+        box-shadow: 3px 8px 90px -50px rgba(66, 68, 90, 1);
+    }
+    100%{
+        -webkit-box-shadow: 3px 8px 90px -24px rgba(66, 68, 90, 1);
+        -moz-box-shadow: 3px 8px 90px -24px rgba(66, 68, 90, 1);
+        box-shadow: 3px 8px 90px -24px rgba(66, 68, 90, 1);
+    }
+}
+
+.login-box{
+    color: white !important;
+    border: 1px solid var(--background-elem-2);
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 5px;
+    animation: box-glow 4s infinite;
+
+}
+
+.dark-input{
+    color: white;
+    background-color: rgba(255, 255, 255, .1) !important;
+}
+.form-group>center>label{
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.btn-login{
+    border: 1px solid var(--background-elem-1);
+    background-color: var(--background-elem-2);
+    margin-top: 80px;
+    width: 100%;
+}
+
+.button-box{
+    width: 100%;
+    padding: 5px;
+}
+.button-box > .btn-sm{
+    float: right;
+    margin-left: 5px;
+}
+
+.section-header{
+    color: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    -webkit-box-shadow: inset 0px -24px 24px 2px var(--background-elem-1);
+    -moz-box-shadow: inset 0px -24px 24px 2px var(--background-elem-1);
+    box-shadow: inset 0px -24px 24px 2px var(--background-elem-1);
+}
+.elem-container{
+    padding: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--background-elem-2);
+    background-color: #0D0A2950;
+    height: 100%;
+}
+
+.currency-header{
+    width: 60px;
+}
+
+.button-box>.btn-sm{
+    background: none;
+    min-width: 50px;
+    font-size: 12px;
+}
+.table-base{
+    width: 100%;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.table-base > tbody > tr{
+    border-top: 1px solid var(--background-elem-2);
+}
+
+.table-base > tbody > tr > td {
+    padding: 5px 0px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.table-base > tbody > tr > td > svg {
+    border: 1px solid white;
+    padding: 1px;
+    border-radius: 50%;
+    margin-top: -3px;
+}
+
+.text-right{
+    text-align: right;
+}
