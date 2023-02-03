@@ -13,7 +13,7 @@ const Home = () => {
 
     const [prices, setPrices] = useState([]);
     const [parsedPrices, setParsedPrices] = useState([]);
-    const [activePeriod, setActivePeriod] = useState('1r');
+    const [activePeriod, setActivePeriod] = useState('YEAR');
     const [max, setMax] = useState([]);
     const [min, setMin] = useState([]);
     const [end, setEnd] = useState([]);
@@ -31,23 +31,15 @@ const Home = () => {
         api.get(`getData/${pair}/${startTime}/${endTime}/${TIMEDICT[period][1]}`)
         .then(res => {
             setPrices(res.data.dataset);
-            // setMax(res.data.max);
-            // setMin(res.data.min);
-            // setEnd(res.data.end);
-            // setStart(res.data.start);   
-            
-            setLoading(false);
-            parseData();
+            // setLoading(false);
         })
     }
 
 
-    const parseData = () => {
-      if (parsedPrices.length == 0){
-        console.log("parsedPrices are empty");
+    const parseData = async(p) => {
         var parsed = [];
         console.log("parsing data started");
-        prices.map((p) => {
+        p.map((p) => {
           let o = {time:0, price:0};
 
           let parsedTime = moment.unix(p[0]).format("YYYY-MM-DD");
@@ -60,28 +52,31 @@ const Home = () => {
 
         setParsedPrices(parsed);
         console.log("prices parsed");
-      }
-
+        return parsed;
     }
 
     const changePeriod = async(period) => {
-      setLoading(true);
       setActivePeriod(period);
-      setParsedPrices([]);
-      fetchData(period);
     }
 
     useEffect(() => {
-      fetchData('YEAR');
-    }, []);
+      setLoading(true);
+      fetchData(activePeriod);
+    }, [activePeriod]);
 
+
+    useEffect(() => {
+      setActivePeriod("YEAR");
+    }, []);
 
     //TODO: Replace with something other than parsing data
 
     useEffect(() => {
-      parseData();
-
-    }, [parsedPrices]);
+      parseData(prices)
+      .then(() => {
+        if(prices.length > 0) setLoading(false);
+      });
+    }, [prices]);
 
 
     return(
@@ -147,7 +142,7 @@ const Home = () => {
                 <button className={`periodBtn ${activePeriod === 'MONTH' && 'active'}`} onClick={() => changePeriod('MONTH')} id="1m">1m</button>
                 <button className={`periodBtn ${activePeriod === '3m' && 'active'}`} onClick={() => changePeriod('3m')} id="3m">3m</button>
                 <button className={`periodBtn ${activePeriod === '6m' && 'active'}`} onClick={() => changePeriod('6m')} id="6m">6m</button>
-                <button id="1r" className={`periodBtn ${activePeriod === '1r' && 'active'}`} onClick={() => changePeriod('1r')} >1r</button>
+                <button id="1r" className={`periodBtn ${activePeriod === 'YEAR' && 'active'}`} onClick={() => changePeriod('YEAR')} >1r</button>
               </div>
               </Row>
             </Container>
