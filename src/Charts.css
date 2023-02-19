@@ -1,0 +1,11 @@
+.bluredBox{
+ filter: blur(2px);
+ position: relative;
+}
+
+text{
+    position: unset !important;
+    z-index: 1 !important;
+    /* position: relative !important; */
+    color: white !important;
+}

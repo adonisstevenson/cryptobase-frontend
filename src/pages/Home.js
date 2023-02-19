@@ -1,16 +1,22 @@
-import React, {useState, useEffect, useLayoutEffect}  from 'react';
-import {Container, Row} from 'react-bootstrap';
+import React, {useState, useEffect, useLayoutEffect, useContext}  from 'react';
+import { Link } from "react-router-dom";
+import {Alert, Container, Row} from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import api from '../services/api';
-import { LineChart, YAxis, CartesianGrid, XAxis, Legend, Line, Tooltip } from 'recharts';
 import { TIMEDICT } from '../utils/timeUtils';
 import moment from 'moment';
 import bitcoin from '../img/bitcoin.png';
-import LoadChart from '../components/Charts';
+import {LoadChart, ErrorChart} from '../components/Charts';
 import LoadingSpinner from "../components/LoadingSpinner";
+import ToastMessage from '../components/Messages';
+import AuthContext from '../context/AuthContext';
 
 const Home = () => {
-
+  
+  let {user, setUser} = useContext(AuthContext);
+    
+    const [currentBTC, setCurrentBTC] = useState([]);
+    
     const [prices, setPrices] = useState([]);
     const [parsedPrices, setParsedPrices] = useState([]);
     const [activePeriod, setActivePeriod] = useState('YEAR');
@@ -20,6 +26,32 @@ const Home = () => {
     const [start, setStart] = useState([]);
     
     const [loading, setLoading] = useState(true);
+    const [errorMessage, setErrorMessage] = useState(false);
+
+    const [accounts, setAccounts] = useState([])
+
+    const getCurrent = async() => {
+      
+      api.get(`getCurrentDaily/BTCUSDT`)
+      .then(res => {
+        setCurrentBTC(res.data);
+        console.log(res.data);
+      })
+
+    }
+
+    const getAccounts = async() => {
+      api.get(`getUserAccounts/${user.id}`, {headers: {'Authorization': `Token ${user.token}`}})
+      .then(res => {
+        console.log("accounts");
+        console.log(res.data.accounts);
+        setAccounts(res.data.accounts)
+      })
+    }
+
+    useEffect(() => {
+      getAccounts();
+    }, []);
 
     const fetchData = async(period) => {
 
@@ -31,10 +63,16 @@ const Home = () => {
         api.get(`getData/${pair}/${startTime}/${endTime}/${TIMEDICT[period][1]}`)
         .then(res => {
             setPrices(res.data.dataset);
-            // setLoading(false);
+            setMin(res.data.low);
+            setMax(res.data.max);
+            console.log(res.data.low, res.data.max);
         })
+        .catch(error => {
+          console.log("ERROR", error);
+          setLoading(false);
+          setErrorMessage("Wystąpił błąd przy ładowania wykresu.");
+        });
     }
-
 
     const parseData = async(p) => {
         var parsed = [];
@@ -67,6 +105,7 @@ const Home = () => {
 
     useEffect(() => {
       setActivePeriod("YEAR");
+      getCurrent();
     }, []);
 
     //TODO: Replace with something other than parsing data
@@ -80,7 +119,13 @@ const Home = () => {
 
 
     return(
-        <Container>
+        <Container style={{position: 'relative'}}>
+          {
+            errorMessage ? 
+            (
+              <ToastMessage message={errorMessage} type="warning" />
+            ) : ('')
+          }
             <Row>
             <Col xs={8}>
             <Container>
@@ -94,9 +139,13 @@ const Home = () => {
                             <img src={bitcoin} className="cryptoIcon" />
                           </div>
                           <div className='summaryInfo right'>
-                            <p>$6580.87</p>
-                            <p><small>-$50.21</small></p>
-                            <p><small>-2.17%</small></p>
+                            <p>${parseFloat(currentBTC.askPrice).toFixed(2)}</p>
+                            <p><small>{parseFloat(currentBTC.priceChange).toFixed(2)} USD</small></p>
+                            <p>
+                              <small className={parseFloat(currentBTC.priceChangePercent) < 0 ? 'red' : 'green'}>
+                                {parseFloat(currentBTC.priceChangePercent).toFixed(2)}% 
+                              </small>
+                            </p>
                           </div>
                           <div style={{'clear': 'both'}}></div>
                         </div>
@@ -132,13 +181,19 @@ const Home = () => {
                 <LoadingSpinner/>
               ) : 
               (
-              <LoadChart data={parsedPrices} height={400} width={736} dataKey="price" />    
+                errorMessage ? 
+                (
+                  <ErrorChart message={errorMessage} />
+                ) : 
+                (
+                  <LoadChart data={parsedPrices} height={400} width={736} dataKey="price" min={min} max={max} />    
+                )
               )
               }
               </div>
-              <div className="periodBox">
-                <button className={`periodBtn ${activePeriod === '1h' && 'active'}`} onClick={() => changePeriod('1h')} id="1h">1h</button>
-                <button className={`periodBtn ${activePeriod === '1d' && 'active'}`} onClick={() => changePeriod('1d')} id="1d">1d</button>
+              <div className="periodBox" style={{display: errorMessage ? 'none' : 'block'}} >
+                <button className={`periodBtn ${activePeriod === 'HOUR' && 'active'}`} onClick={() => changePeriod('HOUR')} id="1h">1h</button>
+                <button className={`periodBtn ${activePeriod === 'DAY' && 'active'}`} onClick={() => changePeriod('DAY')} id="1d">1d</button>
                 <button className={`periodBtn ${activePeriod === 'MONTH' && 'active'}`} onClick={() => changePeriod('MONTH')} id="1m">1m</button>
                 <button className={`periodBtn ${activePeriod === '3m' && 'active'}`} onClick={() => changePeriod('3m')} id="3m">3m</button>
                 <button className={`periodBtn ${activePeriod === '6m' && 'active'}`} onClick={() => changePeriod('6m')} id="6m">6m</button>
@@ -148,10 +203,71 @@ const Home = () => {
             </Container>
             </Col>
             <Col xs={4}>
-              <div className='walletBox'>
+              <div className='baseBox walletBox'>
                 <p className='boxTitle'>Portfele</p>
-
                 <p><small>Majątek ~500.30</small> </p>
+                <br />
+                <table style={{width:'100%'}}>
+                  <tbody >
+                    {
+                      accounts.map((account) => (
+                        <tr className='lineTop'>
+                          <td>{account.currency.shortcut}</td>
+                          <td class="text-right">{account.balance}</td>
+                        </tr>
+                      ))
+                    }
+                    {/* <tr className='lineTop'>
+                      <td>BTC</td>
+                      <td class="text-right">$125.08</td>
+                    </tr>
+                    <tr className='lineTop'>
+                      <td>BNB</td>
+                      <td class="text-right">$200.32</td>
+                    </tr>
+                    <tr className='lineTop'>
+                      <td>BNB</td>
+                      <td class="text-right">$200.32</td>
+                    </tr>
+                    <tr className='lineTop'>
+                      <td>BNB</td>
+                      <td class="text-right">$200.32</td>
+                    </tr>
+                    <tr className='lineTop'>
+                      <td>BNB</td>
+                      <td class="text-right">$200.32</td>
+                    </tr>
+                    <tr className='lineTop'>
+                      <td>BNB</td>
+                      <td class="text-right">$200.32</td>
+                    </tr>
+                    <tr className='lineTop'>
+                      <td>BNB</td>
+                      <td class="text-right">$200.32</td>
+                    </tr> */}
+                  </tbody>
+                </table>
+                <br />
+                <center>
+                <button className="btnBase"><Link to='wallets'>POKAŻ WIĘCEJ</Link></button>
+                </center>
+              </div>
+              <br />
+              <div className='baseBox trxBox'>
+                <p className='boxTitle'>Ostatnie transakcje</p>
+                <br />
+                <table style={{width:'100%'}}>
+                  <tbody >
+                    <tr className='lineTop'>
+                      <td>2022-01-02 10:23</td>
+                      <td class="text-right">-$125.08</td>
+                    </tr>
+                    <tr className='lineTop'>
+                      <td>2022-01-02 21:55</td>
+                      <td class="text-right">-0.0031 BTC</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </Col>
             </Row>

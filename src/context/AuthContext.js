@@ -15,25 +15,18 @@ export const AuthProvider = ({children}) => {
 
     let [authTokens, setAuthTokens] = useState(()=> localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null)
     let [user, setUser] = useState(()=> localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null)
-    let [loading, setLoading] = useState(true)
-
+    let [authToken, setAuthToken] = useState(()=> localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')).authToken : null)
 
     const [details, setDetails] = useState({login:"", password:""});
     const navigate = useNavigate();
 
-    let loginUser = async (e)=> {
-        e.preventDefault()
-  
-            api.post('/login_user', qs.stringify({login: e.target.login.value, password:e.target.password.value}))
-            .then(res => {
-                setAuthTokens(res.data);
-                setUser(res.data.jwt);
-                localStorage.setItem('authTokens', JSON.stringify(res.data))
-                window.location.reload(false);
+    let loginUser = async (res)=> {
+        
+        setAuthTokens(res.data);
+        setUser(res.data.jwt);
+        localStorage.setItem('authTokens', JSON.stringify(res.data))
+        window.location.reload(false);
 
-            }).catch(error => {
-                console.log(error);
-            })
     }
 
     let logoutUser = () => {

@@ -1,0 +1,29 @@
+@keyframes slideShow {
+    0%   {
+        bottom: -50vh;
+        opacity: 0;
+    }
+    100% {
+        bottom: -20vh;
+        opacity:  1;
+    }
+  }
+
+.toastBasic{
+    position: absolute;
+    right: 14px;
+    bottom: -20vh;
+    animation-name: slideShow;
+    animation-duration: 1s;
+    background: transparent;
+    border: 1px solid rgba(56, 60, 165, 0.95);
+}
+
+.messageHeader{
+    background: rgba(56, 60, 165, 0.95);
+    color: white;
+}
+.messageBody{
+    background: rgb(131, 133, 173);
+    color: white;
+}

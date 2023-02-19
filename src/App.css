@@ -9,7 +9,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap');
 
-body{
+body, #root{
   background: var(--background-main) !important;
 }
 
@@ -22,7 +22,7 @@ body{
   float:left;
 }
 .right{
-  float:right;
+  float:right !important;
 }
 
 .cryptoSummary{
@@ -31,7 +31,7 @@ body{
   border-radius: 15px;
 }
 
-.openPositions, .walletBox{
+.openPositions, .baseBox, .operationsNav{
   font-family: 'Montserrat', sans-serif !important;
   color: rgba(255, 255, 255, 0.9);
 }
@@ -43,10 +43,9 @@ body{
   width: 100%;
 }
 
-.walletBox{
+.baseBox{
   padding: 10px;
   border: 1px solid rgba(56, 60, 165, 0.8);
-  min-height: 100px;
   border-radius: 15px;
 }
 
@@ -225,8 +224,13 @@ hr{
 }
 
 .dark-input{
-  color: white;
+  color: white !important;
   background-color: rgba(255, 255, 255, .1) !important;
+  height: 100%;
+}
+.dark-input > option{
+  color: white !important;
+  background-color: rgba(0, 0, 0, .8) !important;
 }
 .form-group>center>label{
   color: rgba(255, 255, 255, 0.7);
@@ -235,7 +239,7 @@ hr{
 .btn-login{
   border: 1px solid var(--background-elem-1);
   background-color: var(--background-elem-2);
-  margin-top: 80px;
+  margin-top: 20px;
   width: 100%;
 }
 
@@ -313,4 +317,109 @@ hr{
 .active, .periodBtn:hover{
   background: rgba(56, 60, 165, 0.8);
   color:rgba(255, 255, 255, 0.7);
+}
+
+.lineTop{
+  border-top: 1px solid rgba(56, 60, 165, 0.8);
+}
+
+.btnBase{
+  padding: 5px 20px;
+  font-size: 13px;
+  background:rgba(26, 28, 95, 0.8);
+  border: 1px solid rgba(56, 60, 165, 0.95);
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.btnBase > a, .btnBase > a:hover{
+  text-decoration: none !important;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.trxBox > table{
+  font-size: 14px;
+}
+
+.red{
+  color: rgba(255, 0, 0, .8);
+}
+
+.green{
+  color: rgba(0, 255, 0, .8);
+}
+
+.btnWide{
+  font-size: 1rem;
+  font-weight: bold;
+  width: 100%;
+}
+
+.registerStepBox{
+  margin: 0 auto;
+  width: 90px;
+}
+.stepBar{
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  width: 40px;
+  float: left;
+  margin: 0px 2px;
+}
+
+.stepBar:hover{
+  cursor: pointer;
+}
+
+.stepBarLight{
+  border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+  -webkit-box-shadow: 3px 3px 24px 0px rgba(255, 255, 255, 0.9);
+  -moz-box-shadow: 3px 3px 24px 0px rgba(255, 255, 255, 0.9);
+  box-shadow: 3px 3px 24px 0px rgba(255, 255, 255, 0.9);
+}
+.accountBoxMini{
+  text-align: center;
+  padding: 0px 15px;
+  display: inline-block;
+  margin: 0 auto;
+}
+.accountBoxMini > p{
+  margin: 0 !important;
+}
+.activeDot{
+  margin: 0 !important;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.accountBoxMini > div > input[type=radio]{
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  width: 0.8em;
+  height: 0.8em;
+ 
+}
+
+.accountBoxMini > div > input[type=radio]:checked{
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  background-image: none;
+}
+.operationsNav{
+  background-color: rgba(56, 60, 165, 0.3);
+}
+.navItem{
+  padding: 8px;
+  border-bottom: 1px solid #0d6dfdc4;
+}
+.navItem:hover{
+  cursor:pointer;
+}
+.navItemActive{
+  background-color: rgba(56, 60, 165, 0.7);
+}
+.navItem:nth-child(1){
+  border-top: 1px solid #0d6dfdc4;
+}
+
+.paymentForm{
+  color: rgba(255, 255, 255, 0.815);
+}
+.large{
+  font-size: 18px;
 }

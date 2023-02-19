@@ -153,12 +153,6 @@ hr{
     color: rgba(255, 255, 255, 0.7);
 }
 
-.btn-login{
-    border: 1px solid var(--background-elem-1);
-    background-color: var(--background-elem-2);
-    margin-top: 80px;
-    width: 100%;
-}
 
 .button-box{
     width: 100%;
@@ -216,4 +210,8 @@ hr{
 
 .text-right{
     text-align: right;
+}
+
+.loginBtn{
+    background: none;
 }
