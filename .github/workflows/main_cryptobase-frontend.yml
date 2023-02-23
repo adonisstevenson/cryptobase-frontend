@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'cryptobase-frontend'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_ED3356C293A44C6FAFF6B44425DE1FD2 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7D39DD17FC1A47408BB7783EE90C78F1 }}
           package: .
