@@ -14,18 +14,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v1
         with:
           node-version: '16.x'
 
       - name: npm install, build, and test
         run: |
           npm install
-          CI=false npm run build --if-present
-          
+          npm run build --if-present
+          npm run test --if-present
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'cryptobase-frontend'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E33E5C321623470AB4BABFAA2AC86CC6 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_ED3356C293A44C6FAFF6B44425DE1FD2 }}
           package: .
